@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<title>最新消息｜毛毛澡堂（網站提案示範）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="news.html">
+<header id="site-head"></header>
+
+<main>
+  <div class="page-head tiles" style="padding-bottom:84px">
+    <div class="wrap"><div class="plate"><p style="font-family:var(--round);font-weight:900;font-size:24px">最新消息</p></div></div>
+  </div>
+  <section style="padding-bottom:88px">
+    <div class="narrow">
+      <article class="article" id="post"></article>
+      <a class="back" href="news.html">回到最新消息列表</a>
+    </div>
+  </section>
+</main>
+
+<footer id="site-foot"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/guard.js"></script>
+<script>
+(function () {
+  var id = new URLSearchParams(location.search).get("id");
+  var n = MM.Store.load().news.filter(function (x) { return x.id === id; })[0];
+  var el = document.getElementById("post");
+  if (!n) {
+    el.innerHTML = '<h1>找不到這則消息</h1><p class="muted">這則消息可能已經被店家刪除。回到列表看看其他消息。</p>';
+    return;
+  }
+  document.title = n.title + "｜毛毛澡堂（網站提案示範）";
+  el.innerHTML = '<div class="meta"><time datetime="' + n.date + '">' + n.date.replace(/-/g, "/") + '</time><span class="tag' + (n.pinned ? " pin" : "") + '">' + MM.esc(n.tag) + "</span></div>" +
+    "<h1>" + MM.esc(n.title) + '</h1><div class="body">' + MM.paras(n.body) + "</div>";
+})();
+</script>
+</body>
+</html>

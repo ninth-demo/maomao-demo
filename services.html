@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<title>服務價目｜毛毛澡堂（網站提案示範）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="services.html">
+<header id="site-head"></header>
+
+<main>
+  <div class="page-head tiles">
+    <div class="wrap">
+      <div class="plate"><h1>服務價目</h1></div>
+      <br><p>價格依毛孩體型計算，來店前可以先量一下體重。</p>
+    </div>
+  </div>
+
+  <nav class="price-nav" aria-label="價目分類" id="price-nav"></nav>
+
+  <div class="wrap" id="price-blocks"></div>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="h2">價格之外，您可能想知道</h2>
+      <div class="faq narrow" style="margin-left:0">
+        <details><summary>毛孩打結很嚴重，會另外收費嗎？</summary><p>毛髮嚴重打結需要額外處理時間，美容師會先跟您說明並報價，您同意後才開始處理。</p></details>
+        <details><summary>貓咪可以洗嗎？</summary><p>貓咪的服務請先來電或私訊 Instagram，我們會依貓咪的個性和狀況安排。</p></details>
+        <details><summary>要等多久？</summary><p>精緻洗澡大約 1.5～2 小時，大美容大約 2.5～3 小時，實際時間依毛量和體型而定。完成後我們會打電話通知您。</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-foot"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/guard.js"></script>
+<script>
+(function () {
+  var data = MM.Store.load();
+  document.getElementById("price-nav").innerHTML = MM.CATS.map(function (c) {
+    return '<a href="#' + c.id + '">' + c.name + "</a>";
+  }).join("");
+
+  document.getElementById("price-blocks").innerHTML = MM.CATS.map(function (c) {
+    var rows = data.prices.filter(function (p) { return p.cat === c.id; });
+    var head = "<tr><th>項目</th>" + c.cols.map(function (col, i) {
+      return "<th>" + col + (c.sub[i] ? "<small>" + c.sub[i] + "</small>" : "") + "</th>";
+    }).join("") + "</tr>";
+    var body = rows.length ? rows.map(function (r) {
+      return '<tr><td><span class="name">' + MM.esc(r.name) + "</span>" + (r.desc ? '<span class="d">' + MM.esc(r.desc) + "</span>" : "") + "</td>" +
+        c.cols.map(function (_, i) { return '<td class="n">' + (r.prices[i] != null && r.prices[i] !== "" ? MM.money(r.prices[i]) : "—") + "</td>"; }).join("") + "</tr>";
+    }).join("") : '<tr><td colspan="' + (c.cols.length + 1) + '" class="muted">這個分類目前沒有項目。</td></tr>';
+    var extra = c.id === "self" ? '<p class="note">第一次來自助洗？先看 <a href="self-wash.html">自助洗怎麼用</a>。</p>' : "";
+    return '<section class="price-block" id="' + c.id + '" aria-labelledby="h-' + c.id + '">' +
+      '<div class="price-head"><div><h2 class="h2" id="h-' + c.id + '">' + c.name + '</h2><p class="lead" style="margin-top:4px">' + c.intro + "</p></div></div>" +
+      '<div class="table-wrap"><table class="price"><thead>' + head + "</thead><tbody>" + body + "</tbody></table></div>" + extra +
+    "</section>";
+  }).join("") + '<p class="demo-price">目前的價格是示範內容。商家可以在後台自己修改，網站會立刻更新。</p>';
+
+  if (location.hash) {
+    var t = document.querySelector(location.hash);
+    if (t) t.scrollIntoView();
+  }
+})();
+</script>
+</body>
+</html>

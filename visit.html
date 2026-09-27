@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<title>預約與交通｜毛毛澡堂（網站提案示範）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-page="visit.html">
+<header id="site-head"></header>
+
+<main>
+  <div class="page-head tiles">
+    <div class="wrap">
+      <div class="plate"><h1>預約與交通</h1></div>
+      <br><p>填好預約單，店家確認後會打電話給您。</p>
+    </div>
+  </div>
+
+  <section class="sec" style="padding-top:56px">
+    <div class="wrap visit-grid">
+      <div class="card" id="book">
+        <h2>線上預約</h2>
+        <p class="closure-alert" id="closure-alert"></p>
+        <form class="form" id="book-form" novalidate>
+          <div class="field">
+            <label for="svc">想預約的服務</label>
+            <select id="svc" name="svc" required>
+              <option value="專業美容：精緻洗澡">專業美容：精緻洗澡</option>
+              <option value="專業美容：大美容">專業美容：大美容</option>
+              <option value="自助澡堂">自助澡堂</option>
+            </select>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="date">日期</label><input id="date" name="date" type="date" required></div>
+            <div class="field"><label for="time">時間</label><select id="time" name="time" required></select></div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="pet">毛孩品種</label><input id="pet" name="pet" placeholder="例如：柴犬" required></div>
+            <div class="field"><label for="size">體型</label>
+              <select id="size" name="size"><option>小型犬（8 公斤以下）</option><option>中型犬（8～15 公斤）</option><option>大型犬（15 公斤以上）</option></select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field"><label for="name">您的稱呼</label><input id="name" name="name" placeholder="例如：王小姐" required></div>
+            <div class="field"><label for="phone">手機號碼</label><input id="phone" name="phone" type="tel" inputmode="tel" placeholder="0912345678" required></div>
+          </div>
+          <div class="field"><label for="memo">想跟店家說的話（選填）</label><textarea id="memo" name="memo" rows="3" placeholder="例如：毛孩怕吹風機、有皮膚問題"></textarea></div>
+          <p class="hint" id="form-error" style="color:var(--danger);font-weight:700"></p>
+          <button class="btn btn-primary" type="submit">送出預約</button>
+          <p class="toast" id="toast" role="status"></p>
+        </form>
+      </div>
+
+      <div>
+        <div class="card">
+          <h2>營業時間</h2>
+          <table class="hours" id="hours"></table>
+          <p class="hint" style="margin-top:10px">國定假日與臨時公休，會公告在最新消息。</p>
+        </div>
+        <div class="card">
+          <h2>地址與聯絡</h2>
+          <ul class="contact-list">
+            <li>新北市板橋區民生路三段 293 號</li>
+            <li>電話　<a href="tel:0222553006">02-2255-3006</a></li>
+            <li>Instagram　<a href="https://www.instagram.com/maomao_house/" target="_blank" rel="noopener">@maomao_house</a></li>
+          </ul>
+          <iframe class="map" title="毛毛澡堂地圖" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=%E6%96%B0%E5%8C%97%E5%B8%82%E6%9D%BF%E6%A9%8B%E5%8D%80%E6%B0%91%E7%94%9F%E8%B7%AF%E4%B8%89%E6%AE%B5293%E8%99%9F&output=embed"></iframe>
+          <p style="margin-top:14px"><a class="btn btn-ghost btn-small" href="https://www.google.com/maps/search/?api=1&query=%E6%AF%9B%E6%AF%9B%E6%BE%A1%E5%A0%82+%E6%9D%BF%E6%A9%8B%E5%8D%80%E6%B0%91%E7%94%9F%E8%B7%AF%E4%B8%89%E6%AE%B5293%E8%99%9F" target="_blank" rel="noopener">在 Google 地圖看評價</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="site-foot"></footer>
+<script src="assets/data.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/guard.js"></script>
+<script>
+(function () {
+  var data = MM.Store.load();
+  var now = MM.taipeiNow();
+
+  document.getElementById("hours").innerHTML = [1, 2, 3, 4, 5, 6, 0].map(function (d) {
+    var h = data.hours[d];
+    return '<tr class="' + (d === now.day ? "today" : "") + '"><td>' + MM.WEEK[d] + "</td><td" + (h ? "" : ' class="off"') + ">" + (h ? h[0] + "～" + h[1] : "公休") + "</td></tr>";
+  }).join("");
+
+  var dateEl = document.getElementById("date"), timeEl = document.getElementById("time");
+  var alertEl = document.getElementById("closure-alert");
+  dateEl.min = now.date;
+  dateEl.value = now.date;
+
+  function slots() {
+    var d = dateEl.value;
+    var st = MM.statusFor(data, d);
+    var day = new Date(d + "T00:00:00Z").getUTCDay();
+    var h = data.hours[day];
+    timeEl.innerHTML = "";
+    alertEl.classList.remove("show");
+    if (!d) return;
+    if (st.closure || !h) {
+      alertEl.textContent = d.replace(/-/g, "/") + (st.closure ? " 臨時公休" + (st.closure.reason ? "（" + st.closure.reason + "）" : "") : " 是" + MM.WEEK[day] + "，固定公休") + "，請選其他日期。";
+      alertEl.classList.add("show");
+      timeEl.innerHTML = "<option value=''>當天公休</option>";
+      return;
+    }
+    var start = +h[0].split(":")[0], end = +h[1].split(":")[0];
+    for (var t = start; t <= end - 2; t++) {
+      var v = (t < 10 ? "0" : "") + t + ":00";
+      if (d === now.date && v <= now.time) continue;
+      timeEl.insertAdjacentHTML("beforeend", "<option>" + v + "</option>");
+    }
+    if (!timeEl.options.length) timeEl.innerHTML = "<option value=''>今天的時段已滿，請選其他日期</option>";
+  }
+  dateEl.addEventListener("change", slots);
+  slots();
+  // 今天沒有可預約時段，就自動跳到下一個有營業的日子
+  for (var i = 0; i < 14 && !timeEl.value; i++) {
+    var nd = new Date(dateEl.value + "T00:00:00Z"); nd.setUTCDate(nd.getUTCDate() + 1);
+    dateEl.value = nd.toISOString().slice(0, 10);
+    slots();
+  }
+
+  document.getElementById("book-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, err = document.getElementById("form-error");
+    var phone = f.phone.value.replace(/\D/g, "");
+    if (!f.time.value) { err.textContent = "這天沒有可預約的時段，請換一個日期。"; return; }
+    if (!f.pet.value.trim() || !f.name.value.trim()) { err.textContent = "請填寫毛孩品種和您的稱呼。"; return; }
+    if (!/^09\d{8}$/.test(phone)) { err.textContent = "手機號碼格式不對，請輸入 09 開頭的 10 位數字。"; return; }
+    err.textContent = "";
+    var d = MM.Store.load();
+    d.bookings.push({
+      id: "b" + Date.now(), created: MM.taipeiNow().date + " " + MM.taipeiNow().time,
+      svc: f.svc.value, date: f.date.value, time: f.time.value, pet: f.pet.value.trim(), size: f.size.value,
+      name: f.name.value.trim(), phone: phone, memo: f.memo.value.trim(), status: "待確認"
+    });
+    MM.Store.save(d);
+    var t = document.getElementById("toast");
+    t.innerHTML = "預約已送出：" + MM.esc(f.date.value.replace(/-/g, "/")) + " " + MM.esc(f.time.value) + "。店家確認後會打電話給您。<br><span style='font-weight:400'>（示範版：這筆預約可以在 <a href='admin/index.html#bookings'>商家後台</a> 看到）</span>";
+    t.classList.add("show");
+    f.pet.value = ""; f.name.value = ""; f.phone.value = ""; f.memo.value = "";
+  });
+})();
+</script>
+</body>
+</html>
