@@ -63,7 +63,7 @@
   // 網域鎖：只在 Ninth 的網址或本機預覽時顯示
   var h = location.hostname, p = location.pathname;
   var ok = h === "" || h === "localhost" || h === "127.0.0.1" ||
-    ((h === "ninthlab99-netizen.github.io" || h === "ninthlab.com.tw" || h === "www.ninthlab.com.tw") &&
+    (h === "ninth-demo.github.io" &&
       p.indexOf("/maomao-demo") === 0);
   if (!ok) {
     document.documentElement.innerHTML =
